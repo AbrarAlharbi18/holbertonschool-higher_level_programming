@@ -2,4 +2,4 @@
 str1 = "object"
 str2 = "oriented"
 str3 = "programming"
-print(str1 + "-" + str2 + " " + str3 + " with Python")
+print(f"{str1}-{str2} {str3} with Python")
