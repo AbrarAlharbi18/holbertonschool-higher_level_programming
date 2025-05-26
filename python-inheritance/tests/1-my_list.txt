@@ -1,0 +1,25 @@
+>>> MyList = __import__('1-my_list').MyList
+
+>>> obj = MyList()
+
+>>> obj.print_sorted()
+[]
+
+>>> obj.append(6)
+
+>>> obj.append(1)
+
+>>> obj.append(9)
+
+>>> obj.print_sorted()
+[1, 6, 9]
+
+>>> obj.append("2")
+
+>>> obj.print_sorted()
+Traceback (most recent call last):
+...
+TypeError: '<' not supported between instances of 'str' and 'int'
+
+>>> str(obj)
+"[6, 1, 9, '2']"
