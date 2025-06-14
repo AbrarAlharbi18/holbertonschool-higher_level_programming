@@ -1,9 +1,12 @@
-# restful-api/task_03_http_server.py
-
-from http.server import BaseHTTPRequestHandler, HTTPServer
+#!/usr/bin/python3
+"""Python web server"""
+import http.server
+import socketserver
 import json
 
-class SimpleAPIHandler(BaseHTTPRequestHandler):
+
+PORT = 8000
+class MyHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/":
             self.send_response(200)
@@ -15,46 +18,25 @@ class SimpleAPIHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-type", "application/json")
             self.end_headers()
-            response = {
+            response_data = {
                 "name": "John",
                 "age": 30,
                 "city": "New York"
             }
-            self.wfile.write(json.dumps(response).encode("utf-8"))
-
+            self.wfile.write(json.dumps(response_data).encode('utf-8'))
         elif self.path == "/status":
             self.send_response(200)
-            self.send_header("Content-type", "application/json")
+            self.send_header("Content-type", "text/plain")
             self.end_headers()
-            response = {
-                "status": "OK"
-            }
-            self.wfile.write(json.dumps(response).encode("utf-8"))
-
-        elif self.path == "/info":
-            self.send_response(200)
-            self.send_header("Content-type", "application/json")
-            self.end_headers()
-            response = {
-                "version": "1.0",
-                "description": "A simple API built with http.server"
-            }
-            self.wfile.write(json.dumps(response).encode("utf-8"))
-
+            self.wfile.write(b"OK")
         else:
             self.send_response(404)
-            self.send_header("Content-type", "application/json")
+            self.send_header("Content-type", "text/plain")
             self.end_headers()
-            error = {
-                "error": "Endpoint not found"
-            }
-            self.wfile.write(json.dumps(error).encode("utf-8"))
+            self.wfile.write(b"404 Not Found")
 
-def run(server_class=HTTPServer, handler_class=SimpleAPIHandler, port=8000):
-    server_address = ('', port)
-    httpd = server_class(server_address, handler_class)
-    print(f"Server running on http://localhost:{port}")
+Handler = MyHandler
+
+with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    print(f"Serving at port {PORT}")
     httpd.serve_forever()
-
-if __name__ == "__main__":
-    run()
